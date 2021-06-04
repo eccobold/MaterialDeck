@@ -99,10 +99,14 @@ export class wfrp4e {
     getItems(token,itemType) {
         if (itemType == undefined) itemType = 'any';
         const allItems = token.actor.items;
-        if (itemType == 'any') return allItems.filter(i => i.type == 'item');
+        if (itemType == 'any') return allItems.filter(i => true); //.filter(i => i.type == 'item');
     }
 
     getItemUses(item) {
+		if (item.data.type == "skill")
+		{
+			return {available: item.data.data.total.value};
+		}
         return {available: item.data.data.quantity};
     }
 
