@@ -94,7 +94,7 @@ export class TokenControl{
                         }
                 }
                 
-                if (stats == 'HP') {
+                if (stats == 'HP' || stats == 'Wounds') {
                     const hp = tokenHelper.getHP(token);
                     txt += hp.value + "/" + hp.max;
                     
@@ -135,6 +135,8 @@ export class TokenControl{
                 else if (stats == 'Save') txt += tokenHelper.getAbilitySave(token, settings.save);
                 else if (stats == 'Skill') txt += tokenHelper.getSkill(token, settings.skill);
                 else if (stats == 'Prof') txt += tokenHelper.getProficiency(token);
+                else if (stats == 'Fate') txt += tokenHelper.getFate(token)
+
                 
                 if (settings.onClick == 'visibility') { //toggle visibility
                     if (MODULE.getPermission('TOKEN','VISIBILITY') == false ) {
@@ -739,7 +741,9 @@ export class TokenControl{
             items = this.sortItems(items);
 
             const item = items[itemNr];
-            if (item != undefined) item.roll();
+            if (item != undefined) {
+                tokenHelper.rollItem(item);
+            }
             
         }
     }

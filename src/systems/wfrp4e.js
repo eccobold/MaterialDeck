@@ -5,12 +5,25 @@ export class wfrp4e {
         
     }
 
-    getHP(token) {
+    getFate(token) {
+        return token.actor.data.data.status.fate.value
+    }
+
+    getWounds(token) {
         const wounds =  token.actor.data.data.status.wounds
         return {
             value: wounds.value,
             max: wounds.max
         } 
+        
+    }
+
+    getHP(token) {
+        return this.getWounds(token);
+    }
+
+    rollItem(item) {
+        return game.wfrp4e.utility.rollItemMacro(item.name, item.type, false);
     }
 
     getTempHP(token) {
@@ -95,19 +108,36 @@ export class wfrp4e {
 
     /**
      * Items
-     */
+    
+    getItems(token,itemType) {
+
+        if (itemType == undefined) itemType = 'any';
+        const allItems = token.actor.items;
+        console.log("allitems: "+ allItems);
+        if (itemType == 'any') return allItems.filter(i => i.type == itemType);
+    }  */
+
     getItems(token,itemType) {
         if (itemType == undefined) itemType = 'any';
         const allItems = token.actor.items;
-        if (itemType == 'any') return allItems.filter(i => true); //.filter(i => i.type == 'item');
+        if (itemType == 'any') return allItems.filter(i => i.type == 'weapon' || 
+        i.type == 'ammunition' || 
+        i.type == 'armour' || 
+        i.type == 'trapping');
+        else {
+            return allItems.filter(i => i.type == itemType);
+        }
     }
 
+
     getItemUses(item) {
-		if (item.data.type == "skill")
-		{
-			return {available: item.data.data.total.value};
-		}
-        return {available: item.data.data.quantity};
+        console.log("getItemUses(" , item , ")")
+        if ( item.type == 'ammunition') {
+            return {available: item.data.data.quantity.value};
+        }
+        else {
+            return;
+        }
     }
 
     /**
